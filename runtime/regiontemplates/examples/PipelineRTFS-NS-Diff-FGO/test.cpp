@@ -154,14 +154,14 @@ void TaskReorder::thinning(int maxWidth) {
             changeParent(child, newParent);
             removeChild(child, nodes);
 
-            if (stage == 1293)
-                printDOT("dot/s1285_" + std::to_string(i + 10) +
-                         std::to_string((j++) + 10));
+            //            if (stage == 1293)
+            // printDOT("dot/s1285_" + std::to_string(i + 10) +
+            //       std::to_string((j++) + 10));
         }
         nodes = filterLevel(i++);
     }
 
-    printDOT("abcd_");
+    //printDOT("abcd_");
 }
 
 // void reorder_stage(std::list<ReusableTask *> &tasks) {

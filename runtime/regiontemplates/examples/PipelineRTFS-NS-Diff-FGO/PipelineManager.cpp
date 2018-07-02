@@ -211,19 +211,24 @@ int main(int argc, char* argv[]) {
         fgm::merge_stages_fine_grain(
             merging_algorithm, expanded_stages, base_stages, merged_stages,
             expanded_args, max_bucket_size, n_nodes, shuffle, dakota_file);
-
         gettimeofday(&end, NULL);
-        // DEBUG_PCBLIST_TO_DOT("test1", merged_stages);
-        reorder_stages(merged_stages);
-        // DEBUG_PCBLIST_TO_DOT("test2", merged_stages);
-        //  int a;
-
         long merge_time = ((end.tv_sec * 1000000 + end.tv_usec) -
                            (start.tv_sec * 1000000 + start.tv_usec));
+
+//        gettimeofday(&start, NULL);
+          DEBUG_PCBLIST_TO_DOT(dakota_file + "dot1_b"+to_string(max_bucket_size), merged_stages);
+          reorder_stages(merged_stages);
+          DEBUG_PCBLIST_TO_DOT(dakota_file + "dot2_b"+to_string(max_bucket_size), merged_stages);
+//        //DEBUG_PCBLIST_TO_DOT("test2", merged_stages);
+//        gettimeofday(&end, NULL);
+//        long merge_thin_time = ((end.tv_sec * 1000000 + end.tv_usec) -
+//                           (start.tv_sec * 1000000 + start.tv_usec));
+        //  int a;
+
         ofstream merge_time_f(
             dakota_file + "-b" + to_string(max_bucket_size) + "merge_time.log",
             ios::app);
-        merge_time_f << merge_time << "\t";
+        merge_time_f << merge_time << "\n"; // << merge_thin_time << "\n\n";
         merge_time_f.close();
 
         // resolve dependencies of reused stages

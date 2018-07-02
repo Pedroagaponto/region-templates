@@ -231,17 +231,17 @@ list<PipelineComponentBase*> merge_stages_full(list<PipelineComponentBase*> stag
 	list<PipelineComponentBase*>::iterator i = stages.begin();
 	
 	for (; i!=stages.end(); i++) {
-        cout << "i tasks=" << (*i)->tasks.size() << endl;
+        //cout << "i tasks=" << (*i)->tasks.size() << endl;
 		for (list<PipelineComponentBase*>::iterator j = next(i); j!=stages.end(); j++) {
-            cout << "j tasks=" << (*j)->tasks.size();
+            //cout << "j tasks=" << (*j)->tasks.size();
 			if (merging_condition(*i, *j, args, ref)) {
-                cout << ".";
+                //cout << ".";
 				merge_stages(*i, *j, ref);
 				(*j)->reused = *i;
 			}
-            cout << endl;
+            //cout << endl;
 		}
-        cout << endl;
+        //cout << endl;
 	}
 
 	return stages;
