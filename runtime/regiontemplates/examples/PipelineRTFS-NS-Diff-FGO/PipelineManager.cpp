@@ -110,6 +110,13 @@ int main(int argc, char* argv[]) {
         } else
             max_bucket_size = atoi(argv[find_arg_pos("-b", argc, argv) + 1]);
 
+        int nInstances;
+        if (find_arg_pos("-i", argc, argv) == -1)
+            nInstances = 4;
+        else
+            nInstances = atoi(argv[find_arg_pos("-i", argc, argv) + 1]);
+
+
         string dakota_file;
         if (find_arg_pos("-dkt", argc, argv) == -1) {
             cout << "Missing dakota file path." << endl;
@@ -217,7 +224,7 @@ int main(int argc, char* argv[]) {
 
 //        gettimeofday(&start, NULL);
           DEBUG_PCBLIST_TO_DOT(dakota_file + "dot1_b"+to_string(max_bucket_size), merged_stages);
-          reorder_stages(merged_stages);
+          reorder_stages(merged_stages, nInstances);
           DEBUG_PCBLIST_TO_DOT(dakota_file + "dot2_b"+to_string(max_bucket_size), merged_stages);
 //        //DEBUG_PCBLIST_TO_DOT("test2", merged_stages);
 //        gettimeofday(&end, NULL);

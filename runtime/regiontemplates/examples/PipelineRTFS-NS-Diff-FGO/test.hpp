@@ -43,12 +43,12 @@ class TaskReorder {
     void writeTree();
 };
 
-void reorder_stages(std::map<int, PipelineComponentBase *> &stages) {
+void reorder_stages(std::map<int, PipelineComponentBase *> &stages, int nInstances) {
     for (std::pair<const int, PipelineComponentBase *> s : stages) {
         if (!s.second->tasks.empty()) {
             TaskReorder tr(s.second->tasks);
             tr.stage = s.second->getId();
-            tr.thinning(4);
+            tr.thinning(nInstances);
         }
     }
 }
