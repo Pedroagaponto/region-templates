@@ -22,8 +22,10 @@ TaskReorder::~TaskReorder() { writeTree(); }
 void TaskReorder::writeTree() {
     for (auto n : tree) {
         n.second.prt->parentTasks.clear();
-        n.second.prt->parentTasks.push_back(n.second.parent);
-        n.second.prt->parentTasks.push_back(n.second.prt->parentTask);
+        //n.second.prt->parentTasks.push_back(n.second.parent);
+        n.second.prt->fakeParent = 321;// n.second.parent;
+        //n.second.prt->parentTask = 123;
+        //n.second.prt->parentTasks.push_back(n.second.prt->parentTask);
     }
 }
 

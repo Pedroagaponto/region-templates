@@ -3,7 +3,7 @@ $INTERTASK_INST$
 }
 
 Task$NAME$::Task$NAME$(list<ArgumentBase*> args, RegionTemplate* inputRt) {
-	
+
 	int set_cout = 0;
 	for(ArgumentBase* a : args){
 $TASK_ARGS$
@@ -11,7 +11,7 @@ $TASK_ARGS$
 	if (set_cout < args.size())
 		std::cout << __FILE__ << ":" << __LINE__ <<" Missing common arguments on Segmentation" << std::endl;
 
-$INTERTASK_INST$	
+$INTERTASK_INST$
 }
 
 Task$NAME$::~Task$NAME$() {
@@ -24,10 +24,10 @@ $OUTPUT_MAT_DR$
 $INTERTASK_MAT$
 	uint64_t t1 = Util::ClockGetTimeProfile();
 
-	std::cout << "Task$NAME$ executing." << std::endl;	
+	std::cout << "Task$NAME$ executing." << std::endl;
 
 	$CMD$
-	
+
 	uint64_t t2 = Util::ClockGetTimeProfile();
 
 $OUTPUT_DR_RETURN$
@@ -51,7 +51,7 @@ $UPDATE_INTS_ARGS$
 void Task$NAME$::resolveDependencies(ReusableTask* t) {
 	// verify if the task type is compatible
 $TYPE_CHECK$
-	
+
 $RESOLVE_DEPS$
 }
 
@@ -69,7 +69,7 @@ $REUSABLE_COND$
 }
 
 int Task$NAME$::size() {
-	return 
+	return
 $TASK_SIZE$
 		0;
 }
@@ -84,6 +84,11 @@ int Task$NAME$::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 $TASK_SERIALIZE$
@@ -131,6 +136,5 @@ ReusableTask* $NAME$Factory2() {
 }
 
 // register factory with the runtime system
-bool registeredTask$NAME$2 = ReusableTask::ReusableTaskFactory::taskRegister("Task$NAME$", 
+bool registeredTask$NAME$2 = ReusableTask::ReusableTaskFactory::taskRegister("Task$NAME$",
 	&$NAME$Factory1, &$NAME$Factory2);
-

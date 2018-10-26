@@ -61,12 +61,12 @@ void TrackDependencies::checkDependencies(Task* task, TasksQueue* tq) {
 	if(task->getNumberDependencies() == task->getNumberDependenciesSolved()){
 		// It always starts empty, and tasks are added as they are dispatched for execution
 		tq->insertTask(task);
-		// std::cout << "[dependency_test] stage " << task->getId() << " is solved: " 
+		// std::cout << "[dependency_test] stage " << task->getId() << " is solved: "
 		// 	<< task->getNumberDependenciesSolved() << " out of "
 		// 	<< task->getNumberDependencies() << std::endl;
 	}else{
 		this->incrementCountTasksPending();
-		// std::cout << "[dependency_test] stage " << task->getId() << " is pending with " 
+		// std::cout << "[dependency_test] stage " << task->getId() << " is pending with "
 		// 	<< task->getNumberDependenciesSolved() << " out of "
 		// 	<< task->getNumberDependencies() << " deps solved" << std::endl;
 	}
