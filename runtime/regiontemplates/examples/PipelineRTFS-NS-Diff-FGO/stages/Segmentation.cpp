@@ -129,12 +129,11 @@ int Segmentation::run() {
 		// solve dependency if it isn't the first task
 		if (t->parentTask != -1) {
 			// cout << "\t\t\t[Segmentation] setting dep of " << t->getId() << " to " << prev_map[t->parentTask]->getId() << endl;
-			//t->addDependency(prev_map[t->parentTask]->getId());
 			t->addDependency(t->parentTask);
 
 			if (t->parentTask != t->fakeParent)
 				t->addDependency(t->fakeParent);
-			//t->addDependencies(t->parentTasks);
+
 			t->resolveDependencies(prev_map[t->parentTask]);
 		}
 
@@ -151,6 +150,7 @@ int Segmentation::run() {
 			<< " with dependencies:" << endl;
 		for (int i=0; i<t->getNumberDependencies(); i++)
 			cout << "\t\t\t\t" << t->getDependency(i) << ":" << endl;
+
 		t->mock = false;
 		this->executeTask(t);
 	}
@@ -174,6 +174,7 @@ bool registeredSegmentation = PipelineComponentBase::ComponentFactory::component
 /**************************************************************************************/
 /*********************************** Task functions ***********************************/
 /**************************************************************************************/
+
 
 TaskSegmentation0::TaskSegmentation0() {
 	bgr = std::shared_ptr<std::vector<cv::Mat>>(new std::vector<cv::Mat>);
@@ -301,7 +302,7 @@ bool TaskSegmentation0::reusable(ReusableTask* rt) {
 
 int TaskSegmentation0::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) + (*this->normalized_rt_temp)->getName().length()*sizeof(char) + sizeof(int) +
 		sizeof(unsigned char) +
 		sizeof(unsigned char) +
@@ -322,6 +323,11 @@ int TaskSegmentation0::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy normalized_rt id
@@ -371,6 +377,10 @@ int TaskSegmentation0::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// create the normalized_rt
@@ -546,7 +556,7 @@ bool TaskSegmentation1::reusable(ReusableTask* rt) {
 
 int TaskSegmentation1::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) +
 
 		0;
@@ -562,6 +572,11 @@ int TaskSegmentation1::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy field reconConnectivity
@@ -581,6 +596,10 @@ int TaskSegmentation1::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// extract field reconConnectivity
@@ -723,7 +742,7 @@ bool TaskSegmentation2::reusable(ReusableTask* rt) {
 
 int TaskSegmentation2::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) +
 		sizeof(int) +
 
@@ -740,6 +759,11 @@ int TaskSegmentation2::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy field fillHolesConnectivity
@@ -763,6 +787,10 @@ int TaskSegmentation2::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// extract field fillHolesConnectivity
@@ -905,7 +933,7 @@ bool TaskSegmentation3::reusable(ReusableTask* rt) {
 
 int TaskSegmentation3::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) +
 		sizeof(int) +
 
@@ -922,6 +950,11 @@ int TaskSegmentation3::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy field minSize
@@ -945,6 +978,10 @@ int TaskSegmentation3::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// extract field minSize
@@ -1081,7 +1118,7 @@ bool TaskSegmentation4::reusable(ReusableTask* rt) {
 
 int TaskSegmentation4::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) +
 
 		0;
@@ -1097,6 +1134,11 @@ int TaskSegmentation4::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy field G2
@@ -1116,6 +1158,10 @@ int TaskSegmentation4::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// extract field G2
@@ -1267,7 +1313,7 @@ bool TaskSegmentation5::reusable(ReusableTask* rt) {
 
 int TaskSegmentation5::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) + (*this->normalized_rt_temp)->getName().length()*sizeof(char) + sizeof(int) +
 		sizeof(int) +
 		sizeof(int) +
@@ -1285,6 +1331,11 @@ int TaskSegmentation5::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy normalized_rt id
@@ -1322,6 +1373,10 @@ int TaskSegmentation5::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// create the normalized_rt
@@ -1429,7 +1484,7 @@ TaskSegmentation6::TaskSegmentation6(list<ArgumentBase*> args, RegionTemplate* i
 }
 
 TaskSegmentation6::~TaskSegmentation6() {
-	if (segmented_rt_temp.unique() && mock)
+	if (segmented_rt_temp.unique())
 		delete *segmented_rt_temp;
 }
 
@@ -1498,7 +1553,7 @@ bool TaskSegmentation6::reusable(ReusableTask* rt) {
 
 int TaskSegmentation6::size() {
 	return
-		sizeof(int) + sizeof(int) +
+		sizeof(int) + sizeof(int) + sizeof(int) +
 		sizeof(int) + (*this->segmented_rt_temp)->getName().length()*sizeof(char) + sizeof(int) +
 		sizeof(int) +
 		sizeof(int) +
@@ -1517,6 +1572,11 @@ int TaskSegmentation6::serialize(char *buff) {
 	// copy parent task id
 	int pt = this->parentTask;
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
 	// copy segmented_rt id
@@ -1558,6 +1618,10 @@ int TaskSegmentation6::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 	// create the segmented_rt
@@ -1627,3 +1691,4 @@ ReusableTask* Segmentation6Factory2() {
 // register factory with the runtime system
 bool registeredTaskSegmentation62 = ReusableTask::ReusableTaskFactory::taskRegister("TaskSegmentation6",
 	&Segmentation6Factory1, &Segmentation6Factory2);
+

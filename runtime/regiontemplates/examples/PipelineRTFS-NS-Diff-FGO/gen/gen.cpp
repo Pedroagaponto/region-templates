@@ -236,7 +236,7 @@ string generate_tasks(Json::Value data, string &desc_decl, string &desc_def) {
 		string update_ints_args;
 		string resolve_deps;
 		string reusable_cond;
-		string task_size = "\t\tsizeof(int) + sizeof(int) +\n";
+		string task_size = "\t\tsizeof(int) + sizeof(int) + sizeof(int) +\n";
 		string task_serialize;
 		string task_deserialize;
 		string task_destr;
@@ -312,7 +312,7 @@ string generate_tasks(Json::Value data, string &desc_decl, string &desc_def) {
 					arg + "_name_size;\n\t(*this->" + arg + "_temp)->setName(" + 
 					arg + "_name);\n\n";
 
-				task_destr += "\tif (" + arg + "_temp.unique() && mock)\n\t\tdelete *" + 
+				task_destr += "\tif (" + arg + "_temp.unique())\n\t\tdelete *" +
 					arg + "_temp;";
 
 				if (data["tasks"][i]["args"][j]["io"].asString().compare("input") == 0) {

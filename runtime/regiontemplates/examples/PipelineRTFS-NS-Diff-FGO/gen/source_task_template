@@ -1,3 +1,4 @@
+
 Task$NAME$::Task$NAME$() {
 $INTERTASK_INST$
 }
@@ -24,14 +25,14 @@ $OUTPUT_MAT_DR$
 $INTERTASK_MAT$
 	uint64_t t1 = Util::ClockGetTimeProfile();
 
-	std::cout << "Task$NAME$ executing." << std::endl;
+	std::cout << "Task$NAME$ of id " << this->getId() << " is executing - " << t1 << std::endl;
 
 	$CMD$
 
 	uint64_t t2 = Util::ClockGetTimeProfile();
 
 $OUTPUT_DR_RETURN$
-	std::cout << "Task $NAME$ time elapsed: "<< t2-t1 << std::endl;
+	std::cout << "Task$NAME$ exec time of task " << this->getId() << " on thread " << tid << ": " << t2-t1 << " - " << t2 << std::endl;
 }
 
 void Task$NAME$::updateDR(RegionTemplate* rt) {
@@ -104,6 +105,10 @@ int Task$NAME$::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 $TASK_DESERIALIZE$
