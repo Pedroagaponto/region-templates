@@ -24,14 +24,14 @@ $OUTPUT_MAT_DR$
 $INTERTASK_MAT$
 	uint64_t t1 = Util::ClockGetTimeProfile();
 
-	std::cout << "Task$NAME$ executing." << std::endl;	
+	std::cout << "Task$NAME$ of id " << this->getId() << " is executing - " << t1 << std::endl;	
 
 	$CMD$
 	
 	uint64_t t2 = Util::ClockGetTimeProfile();
 
 $OUTPUT_DR_RETURN$
-	std::cout << "Task $NAME$ time elapsed: "<< t2-t1 << std::endl;
+	std::cout << "Task$NAME$ exec time of task " << this->getId() << " on thread " << tid << ": " << t2-t1 << " - " << t2 << std::endl;
 }
 
 void Task$NAME$::updateDR(RegionTemplate* rt) {
@@ -69,7 +69,7 @@ $REUSABLE_COND$
 }
 
 int Task$NAME$::size() {
-	return 
+	return
 $TASK_SIZE$
 		0;
 }
@@ -86,6 +86,11 @@ int Task$NAME$::serialize(char *buff) {
 	memcpy(buff+serialized_bytes, &pt, sizeof(int));
 	serialized_bytes+=sizeof(int);
 
+	// copy the fake parent task id
+	int fp = this->fakeParent;
+	memcpy(buff+serialized_bytes, &fp, sizeof(int));
+	serialized_bytes+=sizeof(int);
+
 $TASK_SERIALIZE$
 	return serialized_bytes;
 }
@@ -99,6 +104,10 @@ int Task$NAME$::deserialize(char *buff) {
 
 	// extract parent task id
 	this->parentTask = ((int*)(buff+deserialized_bytes))[0];
+	deserialized_bytes += sizeof(int);
+
+	// extract parent task id
+	this->fakeParent = ((int*)(buff+deserialized_bytes))[0];
 	deserialized_bytes += sizeof(int);
 
 $TASK_DESERIALIZE$
@@ -131,6 +140,6 @@ ReusableTask* $NAME$Factory2() {
 }
 
 // register factory with the runtime system
-bool registeredTask$NAME$2 = ReusableTask::ReusableTaskFactory::taskRegister("Task$NAME$", 
+bool registeredTask$NAME$2 = ReusableTask::ReusableTaskFactory::taskRegister("Task$NAME$",
 	&$NAME$Factory1, &$NAME$Factory2);
 

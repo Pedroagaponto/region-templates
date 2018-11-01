@@ -20,6 +20,8 @@
 #include "RTPipelineComponentBase.h"
 #include "RegionTemplateCollection.h"
 #include "ReusableTask.hpp"
+#include "dot.h"
+#include "test.hpp"
 
 #include "parsing.hpp"
 
@@ -89,6 +91,13 @@ int main(int argc, char* argv[]) {
 			return 0;
 		} else
 			max_bucket_size = atoi(argv[find_arg_pos("-b", argc, argv)+1]);
+
+		int nInstances;
+		if (find_arg_pos("-i", argc, argv) == -1)
+			nInstances = 4;
+		else
+			nInstances = atoi(argv[find_arg_pos("-i", argc, argv) + 1]);
+
 
 		string dakota_file;
 		if (find_arg_pos("-dkt", argc, argv) == -1) {
@@ -192,6 +201,23 @@ int main(int argc, char* argv[]) {
 		ofstream merge_time_f(dakota_file + "-b" + to_string(max_bucket_size) + "merge_time.log", ios::app);
 		merge_time_f << merge_time << "\t";
 		merge_time_f.close();
+
+
+		gettimeofday(&start, NULL);
+		DEBUG_PCBLIST_TO_DOT(dakota_file + "dot1_b"+to_string(max_bucket_size), merged_stages);
+		reorder_stages(merged_stages, nInstances);
+		DEBUG_PCBLIST_TO_DOT(dakota_file + "dot2_b"+to_string(max_bucket_size), merged_stages);
+		//        //DEBUG_PCBLIST_TO_DOT("test2", merged_stages);
+		gettimeofday(&end, NULL);
+
+		long merge_thin_time = ((end.tv_sec * 1000000 + end.tv_usec) -
+						   (start.tv_sec * 1000000 + start.tv_usec));
+		ofstream merge_time_r(
+			dakota_file + "-b" + to_string(max_bucket_size)+ "i" + to_string(nInstances) + "reorder_time.log",
+			ios::app);
+		merge_time_r << merge_thin_time << ", "; // << merge_thin_time << "\n\n";
+		merge_time_r.close();
+
 
 		// resolve dependencies of reused stages
 		for (pair<int, PipelineComponentBase*> p : merged_stages) {
@@ -899,4 +925,3 @@ void expand_stages(const map<int, ArgumentBase*> &args,
 		}
 	}
 }
-
