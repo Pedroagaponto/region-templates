@@ -7,7 +7,7 @@
 #include "PipelineComponentBase.h"
 
 // global uid for any local(this file and PipelineManager) entity
-static int uid=1;
+static int uid=100000;
 int new_uid();
 
 ArgumentBase* find_argument(PipelineComponentBase* p, string name, map<int, ArgumentBase*> expanded_args);
