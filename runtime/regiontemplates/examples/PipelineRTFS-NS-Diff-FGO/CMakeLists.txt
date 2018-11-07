@@ -4,6 +4,13 @@ project(PipelineRTFS-NS-Diff-FGO)
 add_definitions( -std=c++11 -ggdb -gdwarf-2 -fopenmp )
 #add_definitions( -std=c++11 )
 
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+
 find_package( OpenCV REQUIRED )
 
 # Make sure the compiler can find the includes of the runtime system 

@@ -43,8 +43,8 @@ class TaskReorder {
     void writeTree();
 };
 
-void reorder_stages(std::map<int, PipelineComponentBase *> &stages, int nInstances) {
-    for (std::pair<const int, PipelineComponentBase *> s : stages) {
+void reorder_stages(const std::map<int, PipelineComponentBase *> stages, const int nInstances) {
+	for (auto s : stages) {
         if (!s.second->tasks.empty()) {
             TaskReorder tr(s.second->tasks);
             tr.stage = s.second->getId();
@@ -53,4 +53,16 @@ void reorder_stages(std::map<int, PipelineComponentBase *> &stages, int nInstanc
     }
 }
 
+void reorder_stages_parallel(const std::map<int, PipelineComponentBase *> stages, const int nInstances) {
+	#pragma omp parallel for
+	for(int i = 0; i < stages.size(); i++) {
+        auto it = stages.begin();
+        advance(it, i);
+        if (!it->second->tasks.empty()) {
+            TaskReorder tr(it->second->tasks);
+            tr.stage = it->second->getId();
+            tr.thinning(nInstances);
+        }
+    }
+}
 #endif
