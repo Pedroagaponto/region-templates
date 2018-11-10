@@ -1,7 +1,7 @@
 #include "test.hpp"
 #include <algorithm>
 
-TaskReorder::TaskReorder(std::list<ReusableTask *> &tasks) {
+TaskReorder::TaskReorder(std::list<ReusableTask *> &tasks) : tasks(tasks) {
     for (ReusableTask *rt : tasks) {
         node &n = tree[rt->getId()];
         n.id = rt->getId();
@@ -19,13 +19,23 @@ TaskReorder::TaskReorder(std::list<ReusableTask *> &tasks) {
 }
 TaskReorder::~TaskReorder() { writeTree(); }
 
+void TaskReorder::rebuildList(int id){
+    node &n = tree.at(id);
+    for (auto t : n.children) {
+        rebuildList(t);
+    }
+    tasks.push_back(n.prt);
+
+}
+
 void TaskReorder::writeTree() {
     for (auto n : tree) {
-        //n.second.prt->parentTasks.push_back(n.second.parent);
         n.second.prt->fakeParent = n.second.parent;
-        //n.second.prt->parentTask = 123;
-        //n.second.prt->parentTasks.push_back(n.second.prt->parentTask);
     }
+    
+    tasks.clear();
+    rebuildList(root);
+    
 }
 
 /*void TaskReorder::print(int origin, int level) const {

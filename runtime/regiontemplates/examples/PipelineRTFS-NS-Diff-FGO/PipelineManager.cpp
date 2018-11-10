@@ -215,7 +215,7 @@ int main(int argc, char* argv[]) {
 		ofstream merge_time_r(
 			dakota_file + "-b" + to_string(max_bucket_size)+ "i" + to_string(nInstances) + "reorder_time.log",
 			ios::app);
-		merge_time_r << merge_thin_time << ", "; // << merge_thin_time << "\n\n";
+		merge_time_r << merge_thin_time << "\t"; // << merge_thin_time << "\n\n";
 		merge_time_r.close();
 
 

@@ -197,6 +197,8 @@ void TrackDependencies::resolveDependencies(Task* task, TasksQueue* tq) {
 
 			// Increments counter regarding to the number of dependencies solved for the dependent task
 			dependentTask->incrementDepenciesSolved();
+			//std::cout << "--Solved for: " << dependentTask->getId() << " " << 
+			//dependentTask->getNumberDependenciesSolved() << "/" << dependentTask->getNumberDependencies() << "\n" ;
 
 			// if current task is not in ACTIVE, modify dependent tasks to that status
 			if(task->getStatus() != ExecEngineConstants::ACTIVE){

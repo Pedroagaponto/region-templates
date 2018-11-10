@@ -30,6 +30,7 @@ class TaskReorder {
 
     std::unordered_map<int, node> tree;
     int root = 0;
+    std::list<ReusableTask *> &tasks;
 
     void changeParent(int child, int newParent);
     int updateHeight(int id);
@@ -41,10 +42,11 @@ class TaskReorder {
     int child2remove(std::vector<int> nodes);
     void printDOT(std::string filename);
     void writeTree();
+    void rebuildList(int id);
 };
 
 void reorder_stages(const std::map<int, PipelineComponentBase *> stages, const int nInstances) {
-	for (auto s : stages) {
+    for (auto s : stages) {
         if (!s.second->tasks.empty()) {
             TaskReorder tr(s.second->tasks);
             tr.stage = s.second->getId();
@@ -54,8 +56,8 @@ void reorder_stages(const std::map<int, PipelineComponentBase *> stages, const i
 }
 
 void reorder_stages_parallel(const std::map<int, PipelineComponentBase *> stages, const int nInstances) {
-	#pragma omp parallel for
-	for(int i = 0; i < stages.size(); i++) {
+    #pragma omp parallel for
+    for(int i = 0; i < stages.size(); i++) {
         auto it = stages.begin();
         advance(it, i);
         if (!it->second->tasks.empty()) {
