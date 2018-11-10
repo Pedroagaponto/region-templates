@@ -6,6 +6,7 @@ TaskReorder::TaskReorder(std::list<ReusableTask *> &tasks) : tasks(tasks) {
         node &n = tree[rt->getId()];
         n.id = rt->getId();
         n.parent = rt->parentTask;
+        n.trueParent = rt->parentTask;
         n.prt = rt;
 
         if (n.parent != -1)
@@ -97,7 +98,7 @@ std::vector<int> TaskReorder::filterLevel(int level) {
 std::vector<int> TaskReorder::brothers(int id) {
     std::vector<int> ret;
 
-    int parent = tree.at(id).parent;
+    int parent = tree.at(id).trueParent;
     for (auto child : tree.at(parent).children)
         if (child != id) ret.push_back(child);
 
@@ -165,15 +166,41 @@ void TaskReorder::thinning(int maxWidth) {
 
             changeParent(child, newParent);
             removeChild(child, nodes);
-
-            //            if (stage == 1293)
-            // printDOT("dot/s1285_" + std::to_string(i + 10) +
-            //       std::to_string((j++) + 10));
         }
         nodes = filterLevel(i++);
     }
+}
 
-    //printDOT("abcd_");
+int TaskReorder::child2promote(int id, int trueParent) {
+    int ret = 0;
+    for (auto n : tree.at(id).children){
+        if ((ret = child2promote(n, trueParent)) != 0)
+            return ret;
+    }
+
+    if (tree.at(id).trueParent == trueParent)
+        return id;
+
+    return 0;
+}
+
+void TaskReorder::thickening(int minWidth) {
+    int i = 5;
+    auto nodes = filterLevel(i++);
+
+    while (!nodes.empty()) {
+        for (int j = 0; j < nodes.size(); j++){
+            if(nodes.size() < minWidth){
+                int child = child2promote(nodes[j], tree.at(nodes[j]).trueParent);
+                if (child != nodes[j]){
+                    changeParent(child, tree.at(nodes[j]).parent);
+                    nodes.push_back(child);
+                    j--;
+                }
+            }
+        }
+        nodes = filterLevel(i++);
+    }
 }
 
 // void reorder_stage(std::list<ReusableTask *> &tasks) {

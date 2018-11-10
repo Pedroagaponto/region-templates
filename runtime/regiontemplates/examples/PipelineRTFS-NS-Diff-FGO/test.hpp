@@ -15,6 +15,7 @@ class TaskReorder {
     void print(int origin = 0, int level = 0) const;
 
     void thinning(int maxWidth);
+    void thickening(int minWidth);
 
     int stage = 0;
   private:
@@ -22,6 +23,7 @@ class TaskReorder {
       public:
         int id = 0;
         int parent = 0;
+        int trueParent = 0;
         std::vector<int> children;
         int height = 0;
         int level = 0;
@@ -43,6 +45,7 @@ class TaskReorder {
     void printDOT(std::string filename);
     void writeTree();
     void rebuildList(int id);
+    int child2promote(int id, int trueParent);
 };
 
 void reorder_stages(const std::map<int, PipelineComponentBase *> stages, const int nInstances) {
@@ -51,6 +54,7 @@ void reorder_stages(const std::map<int, PipelineComponentBase *> stages, const i
             TaskReorder tr(s.second->tasks);
             tr.stage = s.second->getId();
             tr.thinning(nInstances);
+            tr.thickening(nInstances);
         }
     }
 }
