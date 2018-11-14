@@ -27,6 +27,7 @@ class TaskReorder {
         std::vector<int> children;
         int height = 0;
         int level = 0;
+		bool leaf = false;
         ReusableTask *prt = nullptr;
     };
 
@@ -54,7 +55,7 @@ void reorder_stages(const std::map<int, PipelineComponentBase *> stages, const i
             TaskReorder tr(s.second->tasks);
             tr.stage = s.second->getId();
             tr.thinning(nInstances);
-            tr.thickening(nInstances);
+            //tr.thickening(nInstances);
         }
     }
 }
