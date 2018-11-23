@@ -202,13 +202,14 @@ int main(int argc, char* argv[]) {
 		merge_time_f << merge_time << "\t";
 		merge_time_f.close();
 
-
-		gettimeofday(&start, NULL);
+		
 		DEBUG_PCBLIST_TO_DOT(dakota_file + "dot1_b"+to_string(max_bucket_size), merged_stages);
-		reorder_stages(merged_stages, nInstances);
+		gettimeofday(&start, NULL);
+		if (max_bucket_size > nInstances)
+			reorder_stages(merged_stages, nInstances);
+		gettimeofday(&end, NULL);
 		DEBUG_PCBLIST_TO_DOT(dakota_file + "dot2_b"+to_string(max_bucket_size), merged_stages);
 		//        //DEBUG_PCBLIST_TO_DOT("test2", merged_stages);
-		gettimeofday(&end, NULL);
 
 		long merge_thin_time = ((end.tv_sec * 1000000 + end.tv_usec) -
 						   (start.tv_sec * 1000000 + start.tv_usec));
