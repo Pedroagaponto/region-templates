@@ -1,6 +1,5 @@
 #include "test.hpp"
 #include <algorithm>
-#include <queue>
 
 TaskReorder::TaskReorder(std::list<ReusableTask *> &tasks) : tasks(tasks) {
     for (ReusableTask *rt : tasks) {
@@ -21,89 +20,14 @@ TaskReorder::TaskReorder(std::list<ReusableTask *> &tasks) : tasks(tasks) {
 }
 TaskReorder::~TaskReorder() { writeTree(); }
 
-//void TaskReorder::rebuildList(int id){
-//    node &n = tree.at(id);
-//    for (auto t : n.children) {
-//        rebuildList(t);
-//    }
-//    tasks.push_back(n.prt);
-
-//}
-
-//void TaskReorder::rebuildList(int id){
-//    for (auto node : tree){
-//        auto pc = tree.at(node.second.trueParent); //parent children
-//        if(std::find(pc.begin(), pc.end(), node.id) == pc.end())
-//        {
-//            pc.push_back(node.id);
-//        }
-//    }
-//    if(id < 0)
-//        return;
-//    node &n = tree.at(id);
-//    if(n.level = -10)
-//        return;
-
-//    if()
-//    tasks.push_front(n.prt);
-//    n.level = -10;
-
-//    for (auto t : n.children) {
-//        rebuildList(t);
-//    }
-
-//}
-
 void TaskReorder::rebuildList(int id){
-
-    for (auto& node : tree){
-        node.second.children.clear();
+    node &n = tree.at(id);
+    for (auto t : n.children) {
+        rebuildList(t);
     }
-    for (auto node : tree){
-        if(node.second.trueParent != -1){
-            tree.at(node.second.trueParent).children.push_back(node.second.id);
-            if(node.second.trueParent != node.second.parent)
-                tree.at(node.second.parent).children.push_back(node.second.id);
-        }
-    }
+    tasks.push_back(n.prt);
 
-    // Kahn's algorithm
-    std::queue<int> S;
-    S.push(id);
-    while (!S.empty()) {
-        int n = S.front();
-        S.pop();
-        tasks.push_front(tree.at(n).prt);
-        std::cout << n << "\n";
-        tree.at(n).level = -10;
-
-        for (auto child : tree.at(n).children){
-            if (tree.at(tree.at(child).trueParent).level == -10 &&
-                    tree.at(tree.at(child).trueParent).level == -10 &&
-                    tree.at(child).level != -10)
-                S.push(child);
-        }
-    }
-
-    if (tasks.size() != tree.size())
-    {
-        std::cout << "Unable to reorder tasks\n";
-        exit(1);
-    }
 }
-//L ← Empty list that will contain the sorted elements
-//S ← Set of all nodes with no incoming edge
-//while S is non-empty do
-//    remove a node n from S
-//    add n to tail of L
-//    for each node m with an edge e from n to m do
-//        remove edge e from the graph
-//        if m has no other incoming edges then
-//            insert m into S
-//if graph has edges then
-//    return error   (graph has at least one cycle)
-//else
-//    return L   (a topologically sorted order)
 
 void TaskReorder::writeTree() {
     for (auto n : tree) {
