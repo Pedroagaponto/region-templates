@@ -46,8 +46,9 @@ mkdir /tmp/$TESTE
 sed -i "s/\/tmp\//\/tmp\/$TESTE\//g" rtconf.xml
 ./update-dakota-vbd.sh $DKT ${PWD}$IMG ${PWD}$MASK
 
-#xterm -hold -e ./execbrigds.sh $NP $SIML $BKT $THREADS $DKT $ALG $DOUT $RPT ${DOUT}/${TESTE}-mem.log ${DOUT}/${TESTE}-time.log $W &
-disown
-./execbrigds.sh $NP $SIML $BKT $THREADS $DKT $ALG $DOUT $RPT ${DOUT}/${TESTE}-mem.log ${DOUT}/${TESTE}-time.log $W
+TIMEFILE=${DOUT}/${DKT}.log-b${BKT}time.log
+#xterm -hold -e ./execbrigds.sh $NP $SIML $BKT $THREADS $DKT $ALG $DOUT $RPT $TIMEFILE $TIMEFILE $W &
+#disown
+sbatch execbrigds.sh $NP $SIML $BKT $THREADS $DKT $ALG $DOUT $RPT $TIMEFILE $TIMEFILE $W
 
 cd ..

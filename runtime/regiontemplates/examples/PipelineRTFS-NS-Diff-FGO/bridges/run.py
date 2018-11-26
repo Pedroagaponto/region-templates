@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 
-RPT=3
+RPT=1
 ALG=3
 BKT=28
 DKT="vbd_s25.log"
@@ -16,7 +16,7 @@ RT_BASE="base"
 
 def getNP():
     return {1,2,4,7,14,28}
-#    return {2}
+    # return {2}
 
 def getTH(np):
     return {28//np}
@@ -25,7 +25,7 @@ def getI(th):
     if th==1:
         return {1}
     return {1,2,th/2,th}
-#    return {2}
+    # return {2}
 
 def getW(th, i):
     return {th//i}
@@ -37,7 +37,7 @@ for np in getNP():
         for i in getI(th):
             for w in getW(th,i):
                 parameter_set.add((np,th,i,w))
-                
+
 
 parameter_list = sorted(parameter_set)
 for p in parameter_list:
