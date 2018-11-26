@@ -203,21 +203,21 @@ int main(int argc, char* argv[]) {
 		merge_time_f.close();
 
 		
-		DEBUG_PCBLIST_TO_DOT(dakota_file + "dot1_b"+to_string(max_bucket_size), merged_stages);
-		gettimeofday(&start, NULL);
-		if (max_bucket_size > nInstances)
-			reorder_stages(merged_stages, nInstances);
-		gettimeofday(&end, NULL);
-		DEBUG_PCBLIST_TO_DOT(dakota_file + "dot2_b"+to_string(max_bucket_size), merged_stages);
+		// DEBUG_PCBLIST_TO_DOT(dakota_file + "dot1_b"+to_string(max_bucket_size), merged_stages);
+		// gettimeofday(&start, NULL);
+		// if (max_bucket_size > nInstances)
+		// 	reorder_stages(merged_stages, nInstances);
+		// gettimeofday(&end, NULL);
+		// DEBUG_PCBLIST_TO_DOT(dakota_file + "dot2_b"+to_string(max_bucket_size), merged_stages);
 		//        //DEBUG_PCBLIST_TO_DOT("test2", merged_stages);
 
-		long merge_thin_time = ((end.tv_sec * 1000000 + end.tv_usec) -
-						   (start.tv_sec * 1000000 + start.tv_usec));
-		ofstream merge_time_r(
-			dakota_file + "-b" + to_string(max_bucket_size)+ "i" + to_string(nInstances) + "reorder_time.log",
-			ios::app);
-		merge_time_r << merge_thin_time << "\t"; // << merge_thin_time << "\n\n";
-		merge_time_r.close();
+		// long merge_thin_time = ((end.tv_sec * 1000000 + end.tv_usec) -
+		// 				   (start.tv_sec * 1000000 + start.tv_usec));
+		// ofstream merge_time_r(
+		// 	dakota_file + "-b" + to_string(max_bucket_size)+ "i" + to_string(nInstances) + "reorder_time.log",
+		// 	ios::app);
+		// merge_time_r << merge_thin_time << "\t"; // << merge_thin_time << "\n\n";
+		// merge_time_r.close();
 
 
 		// resolve dependencies of reused stages
